@@ -3,8 +3,8 @@ import Cart from "./components/Cart/Cart";
 import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 import { useSelector, useDispatch } from "react-redux";
-import { uiActions } from "./slices/ui-slice";
 import Notification from "./components/UI/Notification";
+import { sendCartData } from "./actions/sendCartData";
 
 let initial = true;
 
@@ -15,47 +15,53 @@ function App() {
   const notification = useSelector((state) => state.ui.notification);
 
   useEffect(() => {
-    const sendCartData = async () => {
-      dispatch(
-        uiActions.showNotification({
-          status: "Pending",
-          title: "Sending...",
-          message: "Sending cart data!",
-        })
-      );
-      const response = await fetch(
-        "https://advanced-redux-7e984-default-rtdb.firebaseio.com/cart.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(cart),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Sending cart data failed.");
-      }
-      dispatch(
-        uiActions.showNotification({
-          status: "success",
-          title: "Success!",
-          message: "Sent cart data successfully!",
-        })
-      );
-    };
 
     if (initial) {
       initial = false;
       return;
     }
-    sendCartData().catch((err) => {
-      dispatch(
-        uiActions.showNotification({
-          status: "error",
-          title: "Error!",
-          message: "Sending cart data failed!",
-        })
-      );
-    });
+
+    dispatch(sendCartData(cart));
+
+
+    // const sendCartData = async () => {
+
+      // dispatch(
+      //   uiActions.showNotification({
+      //     status: "Pending",
+      //     title: "Sending...",
+      //     message: "Sending cart data!",
+      //   })
+      // );
+      // const response = await fetch(
+      //   "https://advanced-redux-7e984-default-rtdb.firebaseio.com/cart.json",
+      //   {
+      //     method: "PUT",
+      //     body: JSON.stringify(cart),
+      //   }
+      // );
+
+      // if (!response.ok) {
+      //   throw new Error("Sending cart data failed.");
+      // }
+      // dispatch(
+      //   uiActions.showNotification({
+      //     status: "success",
+      //     title: "Success!",
+      //     message: "Sent cart data successfully!",
+      //   })
+      // );
+    // };
+
+    // sendCartData().catch((err) => {
+    //   // dispatch(
+    //   //   uiActions.showNotification({
+    //   //     status: "error",
+    //   //     title: "Error!",
+    //   //     message: "Sending cart data failed!",
+    //   //   })
+    //   // );
+    // });
   }, [cart, dispatch]);
   return (
     <>
