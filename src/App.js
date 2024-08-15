@@ -5,6 +5,7 @@ import Products from "./components/Shop/Products";
 import { useSelector, useDispatch } from "react-redux";
 import Notification from "./components/UI/Notification";
 import { sendCartData } from "./actions/sendCartData";
+import { fetchCartData } from "./actions/fetchCartData";
 
 let initial = true;
 
@@ -15,42 +16,46 @@ function App() {
   const notification = useSelector((state) => state.ui.notification);
 
   useEffect(() => {
+    dispatch(fetchCartData());
+  }, [dispatch]);
 
+  useEffect(() => {
     if (initial) {
       initial = false;
       return;
     }
+    if(cart.changed) {
+      dispatch(sendCartData(cart));
 
-    dispatch(sendCartData(cart));
-
-
+    }
+    
     // const sendCartData = async () => {
 
-      // dispatch(
-      //   uiActions.showNotification({
-      //     status: "Pending",
-      //     title: "Sending...",
-      //     message: "Sending cart data!",
-      //   })
-      // );
-      // const response = await fetch(
-      //   "https://advanced-redux-7e984-default-rtdb.firebaseio.com/cart.json",
-      //   {
-      //     method: "PUT",
-      //     body: JSON.stringify(cart),
-      //   }
-      // );
+    // dispatch(
+    //   uiActions.showNotification({
+    //     status: "Pending",
+    //     title: "Sending...",
+    //     message: "Sending cart data!",
+    //   })
+    // );
+    // const response = await fetch(
+    //   "https://advanced-redux-7e984-default-rtdb.firebaseio.com/cart.json",
+    //   {
+    //     method: "PUT",
+    //     body: JSON.stringify(cart),
+    //   }
+    // );
 
-      // if (!response.ok) {
-      //   throw new Error("Sending cart data failed.");
-      // }
-      // dispatch(
-      //   uiActions.showNotification({
-      //     status: "success",
-      //     title: "Success!",
-      //     message: "Sent cart data successfully!",
-      //   })
-      // );
+    // if (!response.ok) {
+    //   throw new Error("Sending cart data failed.");
+    // }
+    // dispatch(
+    //   uiActions.showNotification({
+    //     status: "success",
+    //     title: "Success!",
+    //     message: "Sent cart data successfully!",
+    //   })
+    // );
     // };
 
     // sendCartData().catch((err) => {
